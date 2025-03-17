@@ -1,0 +1,123 @@
+---
+  title: "Data Visualization with ggplot2"
+  subtitle: "Worked Through Example"
+  authors: Shelby Golden, M.S.
+  format: html
+  editor: visual
+  markdown: 
+  editor_options: 
+  chunk_output_type: console
+---
+
+## Introduction
+
+
+
+## Setup
+
+First, we will load the necessary libraries and any special functions used in the script.
+
+```{r setup, message = FALSE, warning = FALSE}
+
+# NOTE: renv initializing might need to be run twice after the repo is
+#       first copied.
+renv::restore()
+
+
+suppressPackageStartupMessages({
+  library("arrow")      # For reading in the data
+  #library("tidyr")      # For tidying data 
+  library("dplyr")      # For data manipulation 
+  #library("stringr")    # For string manipulation
+  #library("lubridate")  # For date manipulation
+  library("ggplot2")    # For creating static visualizations
+  library("plotly")     # For interactive plots
+  library("scales")     # For formatting plots axis
+})
+
+
+# Function to select "Not In"
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+
+```
+
+
+
+
+```{r data_import}
+
+# Parquet is a column-oriented data file that allows for efficient data storage 
+# and lightweight information retrieval. It is best suited for large data sets 
+# that cannot be easily handled "in-memory".
+#
+# Using the arrow() package, we can read and manipulate files in this form.
+df <- read_parquet(file.path(getwd(), "Respiratory_Infections.gz.parquet"))
+
+# Fortunately, the arrow() package developers made their work compatible with
+# tidyverse. We will now cull the full dataset so that it is selected for
+# entries associated with the RSV-NET surveillance program at the state-level.
+df <- df |> 
+  filter(Dataset == "RSV-NET", Region != "All Sites") |>
+  select(-Dataset, -Disease, -`Region Type`, -`Tests Administered`,
+         -`Age-Adjusted Rate`, - `Cumulative Age-Adjusted Rate`) |>
+  # Add scaled values for plotting.
+  group_by(Region) |>
+  mutate(`Scaled Positives` = `Positives Detected`/max(`Positives Detected`)*100) |>
+  ungroup()
+
+# Reorder the columns for clarity.
+df <- df |>
+  select( colnames(df)[c(1:6, 9, 7:8)] )
+
+# glimpse() allows us to see the dimensions of the dataset, column names,
+# the first few entries, and the vector class in one view.
+df |> glimpse()
+
+
+```
+
+
+## Basic Uses of ``ggplot2()``
+
+```{r layers_basic plot, message = FALSE, warning = FALSE}
+
+# 
+df |>
+  filter(Region == "California") |>
+  ggplot() +
+    geom_line(aes(x = `Week Observed`, y = `Scaled Positives`))
+
+
+```
+
+
+```{r layers_basic plot}
+
+# 
+df %>%
+    filter(x == "California") %>%
+    ggplot(aes(x = `Week Observed`, y = `Scaled Positives`, group = as.factor(epiyr), color = as.factor(epiyr) )) +
+    geom_line() +
+    theme_minimal() +
+    xlab('Weeks since July') +
+    ylab('RSV positive tests') +
+    scale_colour_viridis_d() +
+    geom_point(data = point_plot, aes(x = epiwk, y = scaled_cases), col = 'red')
+
+
+```
+
+
+
+## Advanced Uses of ``ggplot2()``
+
+
+
+## Challenge Questions
+
+1.  Filter the `df` data set to include only rows from 2021.
+2.  With the data set filtered for rows from 2021, determine the day with the highest death count along with the corresponding count.
+3.  We want to see how many counties called "Adams" are represented in the data set.
+    a)  Subset the data set by string matches in `County` and find how many rows you see. Remember that each county is expected to have 39 different dates reported.
+    b)  Table your subset results by `County` and `Province_State`. Does this change the answer you got from part a?
