@@ -9,12 +9,12 @@ Yale's Public Health Data Science and Data Equity (DSDE) team created this works
 
 **Workshop Title:** &nbsp; Getting Started with Git and GitHub
 
-**Date:** &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp; Monday November $4^{\text{th}}$, 2024
+**Date:** &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp; Monday March $27^{\text{th}}$, 2025
 
 We will be launching our Coffee, Cookie and Coding $\left(C^3\right)$ workshop series with a starter guide on Git and GitHub. Upon completing the workshop, you will be able to:
-- Identify the benefits of using Git and GitHub.
-- Configure your local Git and personal GitHub accounts and set up their security keys.
-- Share and contribute to projects with an example created in RStudio.
+- Review of tidyverse and an introduction to layered Grammar of Graphics syntax.
+- Common uses of ggplot2: different geometries, axis scaling, statistical elements, and themes.
+- Advanced uses of ggplot2: interactive plots, mapping, and AI assisted coding.
 
 You can find out more about past and upcoming tutorials on our YouTube (coming soon) and [website](https://ysph.yale.edu/public-health-research-and-practice/research-centers-and-initiatives/public-health-data-science-and-data-equity/events/). If you are affiliated with Yale, you can set up an office hour appointment with one of the data scientists ([Bookings Page](https://outlook.office365.com/owa/calendar/DataScienceDataEquityOfficeHours@yale.edu/bookings/)).
 
