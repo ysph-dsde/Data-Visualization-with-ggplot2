@@ -170,6 +170,10 @@ fitted_df |>
 fitted_df[fitted_df$Spline < 0, "Spline"] <- 0 
 fitted_df[fitted_df$Kernel < 0, "Kernel"] <- 0
 
+# Round the scaled and smoothed detection counts to the nearest whole number.
+fitted_df[, c("Scaled Positives", "Spline", "Kernel")] <- 
+  round(fitted_df[, c("Scaled Positives", "Spline", "Kernel")], digits = 0)
+
 # Clean up the column names and reorder the variables for clarity.
 colnames(fitted_df) <- c(colnames(df), "Spline", "Kernel")
 

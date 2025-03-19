@@ -2,6 +2,8 @@
   title: "Data Visualization with ggplot2"
   subtitle: "Worked Through Example"
   authors: Shelby Golden, M.S.
+  date: 03/27/2025
+  date-format: long
   format: html
   editor: visual
   markdown: 
@@ -11,13 +13,25 @@
 
 ## Introduction
 
+In this workshop we delve deeper into the domain specific language of statistical graphics that underpins the `tidyverse` `ggplot2` package sytax: the "Grammar of Graphics". We will explore each discrete grammar layer using laboratory-confirmed RSV hospitalizations data collected by the CDC's Respiratory Virus Hospitalization Surveillance Network (RESP-NET) surveillance program. 
+
+With a better understanding of the syntax fundamentals, we will then get introduced to some advanced uses of `ggplot2` that are commonly used in public health:
+
+  - Making plots interactive with `plotly`
+  - Projecting data to a map
+
+We will close the workshop by asking [Yale's Clarity Platform](https://ai.yale.edu/yales-ai-tools-and-resources/clarity-platform) to reproduce our code from the plot image alone to exhibit how AI can be used to support data visualization work.  Clarity is an AI chatbot that offers similar functions as OpenAI’s ChatGPT and Microsoft Copilot with added data protection. Find out more about [Clarity's security](https://ai.yale.edu/yales-ai-tools-and-resources/clarity-platform/clarity-platform-security?check_logged_in=1) guidelines on "AI at Yale".
+
+The cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH's very own PopHIVE project. Special thanks to Professor Daniel Weinberger for allow us to use his own plots in this workshop.
 
 
-## Setup
+## Set Up the Environment
 
 First, we will load the necessary libraries and any special functions used in the script.
 
-```{r setup, message = FALSE, warning = FALSE}
+```{r setup}
+#| message: FALSE
+#| warning: FALSE
 
 # NOTE: renv initializing might need to be run twice after the repo is
 #       first copied.
@@ -42,33 +56,13 @@ suppressPackageStartupMessages({
 
 ```
 
+Now we will import our cleaned and tidy data, which is ready for plotting. Students who would like to find out more about how to get their data into the plottable, tabular form you will see here can explore our [A Journey into the World of tidyverse](https://github.com/ysph-dsde/A-Journey-Into-The-World-of-tidyverse-Workshop) workshop.
 
-
+**Bonus content:** our data was stored as a paraquet file. Para-what? Parquet is a column-oriented data file that allows for efficient data storage and lightweight information retrieval. It is best suited for large data sets that cannot be easily handled "in-memory". Using the `arrow` package, we can read and manipulate files in this form.
 
 ```{r data_import}
 
-# Parquet is a column-oriented data file that allows for efficient data storage 
-# and lightweight information retrieval. It is best suited for large data sets 
-# that cannot be easily handled "in-memory".
-#
-# Using the arrow() package, we can read and manipulate files in this form.
-df <- read_parquet(file.path(getwd(), "Respiratory_Infections.gz.parquet"))
-
-# Fortunately, the arrow() package developers made their work compatible with
-# tidyverse. We will now cull the full dataset so that it is selected for
-# entries associated with the RSV-NET surveillance program at the state-level.
-df <- df |> 
-  filter(Dataset == "RSV-NET", Region != "All Sites") |>
-  select(-Dataset, -Disease, -`Region Type`, -`Tests Administered`,
-         -`Age-Adjusted Rate`, - `Cumulative Age-Adjusted Rate`) |>
-  # Add scaled values for plotting.
-  group_by(Region) |>
-  mutate(`Scaled Positives` = `Positives Detected`/max(`Positives Detected`)*100) |>
-  ungroup()
-
-# Reorder the columns for clarity.
-df <- df |>
-  select( colnames(df)[c(1:6, 9, 7:8)] )
+df <- read_parquet(file.path(getwd(), "RSV-NET Infections.gz.parquet"))
 
 # glimpse() allows us to see the dimensions of the dataset, column names,
 # the first few entries, and the vector class in one view.
@@ -77,42 +71,110 @@ df |> glimpse()
 
 ```
 
+## Basic Uses of `ggplot2()`
 
-## Basic Uses of ``ggplot2()``
+The first (and arguably most crucial!) layer is **Data**, but simply adding it to `ggplot()` will only generate a plot object with nothing plotted. In the second layer, **Mapping**, we tell the function which variables (columns in the data set) get used for which aesthetic feature in the aesthetics statement, `aes()`.
 
-```{r layers_basic plot, message = FALSE, warning = FALSE}
+A basic plot will only use the aesthetic statement to point variables to specific axes. **MORE ABOUT AESTHETICS**
 
-# 
+```{r layers_1_2}
+#| message: FALSE
+#| warning: FALSE
+
+# The data and aesthetics mapping layers combined.
+ggplot(data = df, aes(x = `Week Observed`, y = `Scaled Positives`))
+
+```
+
+We can use the base R pipe symbol `|>` to pass objects into subsequent functions that build on the previous result. This has the added benefit of organizing operations into digestible pieces, as opposed to gnarly nested functions.
+
+We will utilize this going forward and will no longer explicitly dictate that `data = df`, as this will be already implied by the pipe operation. Just keep in mind that the section of the code block that represents graphical elements will start with a `ggplot() +` statment, and everything preceeding is not part of the graphical layers.
+
+To complete a basic plot, we will now tell the function how we want the data to be displayed in the plot object. We do this by adding the **Geometry** layer. There are many different possible representations of an $x$ and $y$ variable that is translated by the `geom_*()` layer. Here, we will be attempting to plot a line showing changes in RSV positives detected over a season.
+
+```{r layers_basic_plot}
+
+# All three required layers combined: data, aesthetics mapping, and geometry.
 df |>
-  filter(Region == "California") |>
   ggplot() +
-    geom_line(aes(x = `Week Observed`, y = `Scaled Positives`))
+    geom_line(aes(x = MMWRweek, y = `Scaled Positives`))
+
+```
+
+Notice that the same plot can be generated by adding the aesthetics mapping to the plot object (ggplot()) or geom_*() layer. Can you think reasons why you would choose one over the other?
+
+```{r layers_basic_plot_alternative}
+#| eval: FALSE
+
+# A viable alternative representation of the above code:
+df |>
+  ggplot(aes(x = MMWRweek, y = `Scaled Positives`)) +
+    geom_line()
+
+```
+
+**Bonus content:** you can make scatter plots, histograms, line graphs, boxplots, heat maps, and contour plots with the basic `ggplot` functions. There are yet more options with extended packages that members of the R community have produced: [extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/).
+
+But yikes! Look at this plot, I mean oy vey! If we think back to the glimpse of our dataset we might remember that there are additional columns of information that we can use to further distriquish one infections trend.
+
+```{r covariates}
+#| echo: FALSE
+
+list(df$Region |> unique(),
+     df$Season |> unique() |> sort(),
+     df$Level  |> unique() ) |>
+  `names<-`(c("Region", "Season", "Characteristic Level"))
+
+```
+
+
+
+```{r layers_basic_plot_3}
+
+df |>
+  filter(Region == "Connecticut", Season == "2021-22", Level == "N/A") |>
+  ggplot() +
+    geom_line(aes(x = MMWRweek, y = `Scaled Positives`))
 
 
 ```
+
+
+
+We will now add our pièce de résistance, the cherry ontop, a leading point highlighting the week the surrent surveillance data ends at.
 
 
 ```{r layers_basic plot}
 
+# View the fitting results by plotting by the different subsets. Change the
+# value extracted from region or level to view those combinations.
+select_region = unique(df$Region)[13]
+select_level  = unique(df$Level)[14]
+
+
+leading_point = df |> 
+  filter(Region == select_region & Level == select_level,
+         MMWRyear == max(MMWRyear, na.rm = T)) |>
+  filter(MMWRweek == max(MMWRweek))
+
 # 
-df %>%
-    filter(x == "California") %>%
-    ggplot(aes(x = `Week Observed`, y = `Scaled Positives`, group = as.factor(epiyr), color = as.factor(epiyr) )) +
-    geom_line() +
-    theme_minimal() +
-    xlab('Weeks since July') +
-    ylab('RSV positive tests') +
-    scale_colour_viridis_d() +
-    geom_point(data = point_plot, aes(x = epiwk, y = scaled_cases), col = 'red')
+df |>
+    filter(Region == select_region & Level == select_level) |>
+    ggplot() +
+      geom_line(aes(x = MMWRweek, y = Kernel, 
+                 group = as.factor(MMWRyear), color = as.factor(MMWRyear) )) +
+      theme_minimal() +
+      xlab('Weeks since July') +
+      ylab('RSV positive tests') +
+      scale_colour_viridis_d() +
+      geom_point(aes(x = MMWRweek, y = Kernel), 
+                 data = leading_point, color = 'red')
 
 
 ```
 
 
-
-## Advanced Uses of ``ggplot2()``
-
-
+## Advanced Uses of `ggplot2()`
 
 ## Challenge Questions
 
@@ -121,3 +183,7 @@ df %>%
 3.  We want to see how many counties called "Adams" are represented in the data set.
     a)  Subset the data set by string matches in `County` and find how many rows you see. Remember that each county is expected to have 39 different dates reported.
     b)  Table your subset results by `County` and `Province_State`. Does this change the answer you got from part a?
+    
+## Appendix
+
+This workshop was generated using R (v 4.4.4) in the RStudio IDE (v 2024.12.1+563). `renv` was used to store all the relevant packages and package versions with the workshop codespace. All of the workshop materials can be accessed on the ysph-dsde GitHub: [Data Visualization with ggplo2](https://github.com/ysph-dsde/Data-Visualization-with-ggplot2/).
