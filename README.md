@@ -1,4 +1,4 @@
-# Getting Started with Git and GitHub
+# Data Visualization with `ggplot2`
 
 ## About The Coffee, Cookie and Coding $\left(C^3\right)$ Workshops
 
@@ -7,30 +7,32 @@ Yale's Public Health Data Science and Data Equity (DSDE) team created this works
 
 ## About Workshop
 
-**Workshop Title:** &nbsp; Getting Started with Git and GitHub
+**Workshop Title:** &nbsp; Data Visualization with `ggplot2`
 
-**Date:** &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp; Monday March $27^{\text{th}}$, 2025
+**Date:** &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp; Thursday March $27^{\text{th}}$, 2025
 
-We will be launching our Coffee, Cookie and Coding $\left(C^3\right)$ workshop series with a starter guide on Git and GitHub. Upon completing the workshop, you will be able to:
-- Review of tidyverse and an introduction to layered Grammar of Graphics syntax.
-- Common uses of ggplot2: different geometries, axis scaling, statistical elements, and themes.
-- Advanced uses of ggplot2: interactive plots, mapping, and AI assisted coding.
+Upon completing the workshop, you will be able to:
+- Classify the Grammar of Graphics layers used in `ggplot` syntax.
+- Utilize `ggplot2` for common tasks, including applications of different geometries, effective use of layering, and polishing the result.
+- Applying `ggplot2` to make interactive plots, map projections, and leverage AI-assisted coding.
 
 You can find out more about past and upcoming tutorials on our YouTube (coming soon) and [website](https://ysph.yale.edu/public-health-research-and-practice/research-centers-and-initiatives/public-health-data-science-and-data-equity/events/). If you are affiliated with Yale, you can set up an office hour appointment with one of the data scientists ([Bookings Page](https://outlook.office365.com/owa/calendar/DataScienceDataEquityOfficeHours@yale.edu/bookings/)).
 
 ## About Repository
 
-There are two GitHub repositories associated with this workshop and one unifying repository with the workshop slides. The link to the second repository can be found here: [JHU-CRC-Cases-and-Recoveries](https://github.com/ysph-dsde/JHU-CRC-Cases-and-Recoveries). The link to the unifying repository with the workshop slides can be found here: [Getting-Started-with-Git-and-GitHub-Workshop](https://github.com/ysph-dsde/Getting-Started-with-Git-and-GitHub-Workshop).
+This is the only repository associated with this workshop. It contains all of the relevant code, the data set, and a PDF of the slide deck that was used in the workshop. Limited comments were added to the slide deck PDF. Users who wish to see these extra commentaries will need to download the PDF to their local device.
 
 ### Overview Of Contents
 
-- **For the analysis:** `Analysis Script_Vaccinations Time-Series Plot.R`
-- **For cleaning the raw data:** `Cleaning Script_Vaccinations.R`
-- **For harmonizing census data:** `Population Estimates and Projections/Census Data Harmonization Script.R`
-- **R version:** 4.4.1
+- **Worked Through Example:** the *.qmd file constitues the code used to generate the *.html report
+- **Worked Through Example - associated files:** "Images" directory
+- **For cleaning and preparing the data:** "Data Cleaning" directory
+- **The dataset used in the workshop:** `RSV-NET Infections.gz.parquet`
+- **Code for the workshop discussions and challenge questions:** `Discussion and Challenge Questions.R`
+- **R version:** 4.4.4
 - ``renv`` is included to reproduce the environment.
 
-**NOTE:** The cleaning and census harmonization scripts have already been run to generate the necessary files called in the analysis workflow. Users of this repository will only need to open the `Analysis Script_Vaccinations Time-Series Plot.R`.
+**NOTE:** The cleaning scripts have already been run to generate the necessary files called in the worked through example. Users of this repository will only need to open the `Discussion and Challenge Questions.R` script and `Worked Through Example.html` file.
 
 ## Using this Repository
 
