@@ -188,7 +188,7 @@ df |>
 
 ```
 
-**Discussion:** Can you think reasons why you would choose one over the other?
+**Discussion:** Can you think of reasons why you would choose one over the other?
 
 You might be asking yourself why I went through the pains of showing the thought process behind tuning the plot so that it shows one distinguishable trend line. Am I not simply covering the grammar of whatever to plot a simple trend line while you eat a delicious cookie and compartmentalize your upcoming exams?
 
