@@ -32,7 +32,7 @@ This is the only repository associated with this workshop. It contains all of th
 - **R version:** 4.4.4
 - ``renv`` is included to reproduce the environment.
 
-**NOTE:** The cleaning scripts have already been run to generate the necessary files called in the worked through example. Users of this repository will only need to open the `Discussion and Challenge Questions.R` script and `Worked Through Example.html` file.
+**NOTE:** The cleaning script and worked through example have already been run to generate the necessary files. Users of this repository will only need to open the `Discussion and Challenge Questions.R` script and `Worked Through Example.html` document. If you wish, you can review the Quarto code used to render the "Worked Through Example" in the *.qmd file of the same name.
 
 ## Using this Repository
 
