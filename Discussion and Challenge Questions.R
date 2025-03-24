@@ -127,7 +127,6 @@ df |>
 
 data("diamonds")
 
-
 # The basic, un-transformed plot.
 ggplot(diamonds, aes(carat, price)) +
   stat_bin2d() + 
