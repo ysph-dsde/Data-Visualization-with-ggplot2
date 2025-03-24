@@ -233,14 +233,13 @@ df |>
 ```
 
 ::: {.callout-tip title="Code Like a Pro"}
-When a `stat_*()` is applied to a data frame (either inside a **Geometric** or **Statistic** layer), a modified data frame is generated as the output containing new, transformed variables. It is possible to call these "generated variables" within the plot object and use them for graph tuning. 
+When a `stat_*()` is applied to a data frame (either inside a **Geometric** or **Statistic** layer), a modified data frame is generated as the output containing new, transformed variables. It is possible to call these "generated variables" within the plot object and use them for graph tuning.
 
 One example provided in *ggplot2: Elegant Graphics for Data Analysis*, shows how to call the `stat_density()` "generated variable", density, created when the data frame is passed through `geom_histogram()`: [Chapter 13 Generated variables](https://ggplot2-book.org/layers.html#sec-generated-variables).
 
-- `ggplot(df, aes(x)) + geom_histogram(binwidth = 500)` plots a histogram with counts as the $y$-axis.
-- `ggplot(df, aes(x)) + geom_histogram(aes(y = after_stat(density)), binwidth = 500)` plots that same histogram with the calculated distribution density as the $y$-axis.
+-   `ggplot(df, aes(x)) + geom_histogram(binwidth = 500)` plots a histogram with counts as the $y$-axis.
+-   `ggplot(df, aes(x)) + geom_histogram(aes(y = after_stat(density)), binwidth = 500)` plots that same histogram with the calculated distribution density as the $y$-axis.
 :::
-
 
 ### The **Scales** Layer
 
@@ -486,16 +485,15 @@ df |>
 ::: {.callout-tip title="Code Like a Pro"}
 Say you regularly generate plots that you want to apply the same custom **Theme** settings to, such as producing visualizations for a group that has specific branding or plots for a cohesive publication. There are two possible solutions you can take that will obviate the need to rewrite the same theme settings in each plot object.
 
-- `theme_set()` allows you to set a new theme globally, overriding the default theme settings for the environment: [Get, set, and modify the active theme](https://ggplot2.tidyverse.org/reference/theme_get.html).
-- Creating your own custom theme function by modify an existing `theme_*()` or writing one from scratch: [Learning to create custom themes in ggplot](https://rpubs.com/mclaire19/ggplot2-custom-themes) by Maddie Pickens and [Chapter 20.1 New Themes](https://ggplot2-book.org/extensions.html#new-themes) of *ggplot2: Elegant Graphics for Data Analysis*. 
+-   `theme_set()` allows you to set a new theme globally, overriding the default theme settings for the environment: [Get, set, and modify the active theme](https://ggplot2.tidyverse.org/reference/theme_get.html).
+-   Creating your own custom theme function by modify an existing `theme_*()` or writing one from scratch: [Learning to create custom themes in ggplot](https://rpubs.com/mclaire19/ggplot2-custom-themes) by Maddie Pickens and [Chapter 20.1 New Themes](https://ggplot2-book.org/extensions.html#new-themes) of *ggplot2: Elegant Graphics for Data Analysis*.
 :::
-
 
 ### Overlaying Layers
 
-Now that we have become aclimated to each layer that constitutes one cohesive graph, we are ready to discuss how to effectively build more complex graphs by overlaying additional layers. Earlier I hinted that the expression for each layer stands alone as it's own object in the programming environment. When a graph is rendered by `ggplot2` it's going to compress these layers one ontop of another sequentially.
+Now that we have become acclimated to each layer that constitutes one cohesive graph, we are ready to discuss how to effectively build more complex graphs by overlaying additional layers. Earlier I hinted that the expressions for each layer stands alone as it's own object in the programming environment. When a graph is rendered by `ggplot2` it's going to compress these layers one on top of another sequentially.
 
-This is all well and good if the plots we are generating contain the same **Data** and **Mapping** settings, but what if they do not? What if we want to plot a new **Geometry** or **Statistic** layer that doesn't use the same settings used by other layers? Every time you add a new layer, you have the opportunity to override the inhereted settings that were set in the plot object, `ggplot()`.
+This is all well and good if the plots we are generating contain the same **Data** and **Mapping** settings, but what if they do not? What if we want to plot a new **Geometry** or **Statistic** layer that doesn't use the same settings used by other layers? Every time you add a new layer, you have the opportunity to override the inherited settings that were given in the leading plot object, `ggplot()`.
 
 For example, consider the following code. What happens if we change aspects of the **Data** and **Mapping** used by `geom_line()`?
 
@@ -505,23 +503,25 @@ ggplot(df, aes(x = MMWRweek, y = Kernel)) +
   geom_line()
 ```
 
-| Operation | Layer aesthetics  | Result |
-|------|:---------|:--------------------|
-| Add          | `aes(colour = Season)`  | `aes(x = MMWRweek, y = Kernel, colour = Season)` |
-| Override     | `aes(y = Level)`       | `aes(x = MMWRweek, y = Level)` |
-| Remove       | `aes(y = NULL)`        | `aes(x = MMWRweek)` |
+| Operation | Layer aesthetics | Result |
+|----------------|:-----------------|:-------------------------------------|
+| Add | `aes(colour = Season)` | `aes(x = MMWRweek, y = Kernel, colour = Season)` |
+| Override | `aes(y = Level)` | `aes(x = MMWRweek, y = Level)` |
+| Remove | `aes(y = NULL)` | `aes(x = MMWRweek)` |
 
 : Overriding `ggplot()`table from [13.4 Aesthetic mappings](https://ggplot2-book.org/layers.html#sec-plots-and-layers) in *ggplot2: Elegant Graphics for Data Analysis*.
 
-::: {.callout-tip title="Code Like a Pro"}
-Define **Data** or **Mapping** in the leading `ggplot()` plot object when you want those settings carried forward to all subsequent layers. When you need to specify new settings for select **Geometric** or **Statistic** layers, then you can specify those mappings in that layer, overriding any previous designation.
+It is therefore best practice to assign the **Data** or **Mapping** in the leading `ggplot()` plot object when you want those settings carried forward to all subsequent layers. When you need to specify new settings for select **Geometric** or **Statistic** layers, then you can specify those mappings in that layer, overriding any previous designation. You can find more information about plot object layering in `ggplot` in [Chapter 13 Build a plot layer by layer](https://ggplot2-book.org/layers.html#sec-plots-and-layers) in *ggplot2: Elegant Graphics for Data Analysis*.
 
-Find more information about plot object layering for `ggplot` in [13  Build a plot layer by layer](https://ggplot2-book.org/layers.html#sec-plots-and-layers) in *ggplot2: Elegant Graphics for Data Analysis*.
+::: {.callout-tip title="Code Like a Pro"}
+The ability to treat each layer as it's own object in the coding environment allows for flexible and adaptive programming. For example, you can predefined the settings to generating a smoothed line that you apply to different `ggplot()` objects, leaning on inherited **Data** and/or aesthetics **Mappings** given in each.
+
+You can find more information about plot object layering in `ggplot` in [Chapter 18 Programming with ggplot2](https://ggplot2-book.org/programming.html) in *ggplot2: Elegant Graphics for Data Analysis*.
 :::
 
-To exhibit this in our running example, let's add our pièce de résistance, the cherry on top, a leading point highlighting the most recently recorded surveillance week. In order to isolate the exact point we need, we prepare a different subset of the same dataset by filtering for the same distriguishing variables (Region, Season, and Characteristic Level), followed by filtering to the current infections season and then finally the most recent week recorded.
+To exhibit this in our running example, let's add our pièce de résistance, the cherry on top, a leading point highlighting the most recently recorded surveillance week. In order to isolate this exact point, we need to prepare a different subset from the same dataset. We do this by filtering for the same distinguishing variables (Region, Season, and Characteristic Level), followed by filtering to the current infections season, and then finally the most recent week recorded.
 
-This point is then added to our graph as a fesh layer that is printed on the plot object after `geom_line()`. We want to keep the same aesthetics that were mapped to in the `ggplot()` object, and so we only need to define the new dataset we want to overwrite the inhereted dataset with.
+This point is added to our graph as a fresh layer that is printed on the plot object generated up to the `geom_line()` expression. In the function settings, we override the inherited **Data** object and leave the **Mappings** blank, allowing the aesthetics settings to be inherited from the `ggplot()` object.
 
 ```{r layers_basic plot}
 #| fig-width: 10
@@ -556,28 +556,50 @@ Look at us, we are such `ggplot` experts now! High five! Oh wait a second, this 
 
 In this section we will cover two advanced uses of `ggplot2` commonly used in public health: projecting data into a map and making the values intractable.
 
-::: {.callout-tip title="Code Like a Pro"}
-You can make a wide range of univariate and multivariate plots for continuous or discrete data with the base `ggplot2` `geom_*()` functions. There are yet more options with extended packages that members of the R community have produced: [extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/).
-:::
-
+### Introduction to Map Projections with `ggoplot`
 
 ### Introduction to Interactive Plotting with `plotly`
 
+```{r}
+#renderPlotly({
 
+#map_data <- epic_ed_combo %>%
+#      filter(date == input$selected_date & Level == '<1 Years') %>%
+#      mutate(state = state.abb[match(geography, state.name)] ,
+             #Note, if >20%, cap at 20 for plotting!
+#           pct_RSV_ED_epic= if_else(pct_RSV_ED_epic>20,20, pct_RSV_ED_epic)  ) %>%
+#   filter(!is.na(state)) %>%
+#   as.data.frame()
 
-### Introduction to Map Projections with `ggoplot`
+# max.val <- max(epic_ed_combo$pct_RSV_ED_epic, na.rm=T)
+#pal1 <- viridis_pal()(4)
+#date.print <- input$selected_date
 
+#p1 <- usmap::plot_usmap(regions = "state", data = map_data, values = "pct_RSV_ED_epic") +
+#scale_fill_gradientn(
+    #colors = pal1,
+    #values = scales::rescale(c(0, 5, 10, 15, 20)),
+    #limits = c(0, 20),
+    #na.value = "#440154FF"
+  #) +
+  #ggtitle(paste("RSV ED Visit Percentage <1 year olds on", date.print))
 
+#ggplotly(p1)
+#})
+
+```
 
 ## Challenge Questions
 
-1.  Filter the `df` data set to include only rows from 2021.
+1.  In the worked through example we leverage two of the three distinguishing variables: Season and Characteristic Level. In this questions, we want to focus on the third one, Region. Using the final line-graph code from the worked through example, add a row-wise facet to compare two states or HHS regions.
 
 2.  In the polished version of the line plot we layered an additional point on the graph that highlighted the most currently represented date in the active infection season. To get this data, we externally filtered down the dataset to give that point, repeating some of the filtering we are already doing before the plot gets generated.
-    a. Can you modify this approach so that we no longer require the external dataset, thus simplifying our code?
-    b. Now try using `stat_summary(filtered_data, geom = "point", fun = "max", color = "red")` instead of `geom_point()`. If you only filter to MMWRyear, do you get the same result, and if not why?
+
+    a.  Can you modify this approach so that we no longer require the external dataset, thus simplifying our code?
+    b.  Now try using `stat_summary(filtered_data, geom = "point", fun = "max", color = "red")` instead of `geom_point()`. If you only filter to MMWRyear, do you get the same result, and if not why?
 
 3.  We want to see how many counties called "Adams" are represented in the data set.
+
     a)  Subset the data set by string matches in `County` and find how many rows you see. Remember that each county is expected to have 39 different dates reported.
     b)  Table your subset results by `County` and `Province_State`. Does this change the answer you got from part a?
 

@@ -76,7 +76,7 @@ df |>
     geom_line(aes(x = MMWRweek, y = Kernel))
 
 
-## Can you think reasons why you would choose one over the other?
+## Can you think of reasons why you would choose one over the other?
 
 
 
@@ -130,7 +130,8 @@ data("diamonds")
 
 # The basic, un-transformed plot.
 ggplot(diamonds, aes(carat, price)) +
-  geom_point()
+  stat_bin2d() + 
+  geom_smooth(method = "lm")
 
 ## a. Create three separate plots that apply following three modifications to the
 ##    above basic plot.
@@ -172,6 +173,9 @@ leading_point = df |>
 df$Region |> unique()
 
 
+## Using the final line-graph code from the worked through example, add a 
+## row-wise facet to compare two states or HHS regions.
+
 # Modify the following blocks code.
 df |>
   filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
@@ -186,10 +190,6 @@ df |>
     scale_color_brewer(type = "qual", palette = "Dark2") +
     facet_grid(~factor(Level, levels = ages_ordered)) + 
     theme_linedraw()
-
-
-## Using the code copied from the worked through example, add a row-wise
-## facet to compare two states or HHS regions.
 
 
 
@@ -241,6 +241,8 @@ df |>
 
 
 
+
+
 ## ----------------------------------------------------------------
 ## SUGGESTED TO SOLUTIONS TO THE CHALLENEGE QUESTIONS
 
@@ -261,16 +263,16 @@ leading_point = df |>
 p <- df |>
   filter(Region %in% include_regions, Season %in% include_seeasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
-  geom_line() +
-  geom_point(data = leading_point, aes(x = MMWRweek, y = Kernel), 
-             color = "red") +
-  labs(title = "RSV Infection Trends Since 2022",
-       x = "Weeks Since July", 
-       y = "Positive RSV Tests\n(scaled and kernel smoothed)") +
-  ylim(0, 100) +
-  scale_color_brewer(type = "qual", palette = "Dark2") +
-  facet_grid(~factor(Level, levels = ages_ordered)) +
-  theme_linedraw()
+    geom_line() +
+    geom_point(data = leading_point, aes(x = MMWRweek, y = Kernel), 
+               color = "red") +
+    labs(title = "RSV Infection Trends Since 2022",
+         x = "Weeks Since July", 
+         y = "Positive RSV Tests\n(scaled and kernel smoothed)") +
+    ylim(0, 100) +
+    scale_color_brewer(type = "qual", palette = "Dark2") +
+    facet_grid(~factor(Level, levels = ages_ordered)) +
+    theme_linedraw()
 
 # Apply faceting.
 p + facet_grid(Region~factor(Level, levels = ages_ordered))
