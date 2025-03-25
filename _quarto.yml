@@ -1,0 +1,27 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Mukherjee Lab"
+  page-navigation: true
+  navbar:
+    search: true
+    left:
+      - text: Home
+        href: Worked-Through-Example.qmd
+      - text: Public Health DSDE at Yale
+        href: https://ysph.yale.edu/public-health-research-and-practice/research-centers-and-initiatives/public-health-data-science-and-data-equity/
+        target: _blank
+
+language: 
+  search-text-placeholder: Search  # Placeholder text for Search
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
