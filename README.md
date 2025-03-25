@@ -32,7 +32,7 @@ This is the only repository associated with this workshop. It contains all of th
 - **R version:** 4.4.4
 - ``renv`` is included to reproduce the environment.
 
-**NOTE:** The cleaning script and worked through example have already been run to generate the necessary files. Users of this repository will only need to open the `Discussion and Challenge Questions.R` script and `Worked Through Example.html` document. If you wish, you can review the Quarto code used to render the "Worked Through Example" in the *.qmd file of the same name.
+**NOTE:** The cleaning script has already been run to generate the necessary files. Users of this repository will only need to open the `Discussion and Challenge Questions.R` and `Worked Through Example.qmd` scripts. To get the most use out of the `Worked Through Example.qmd`, you will need to render the code to view the *.html output locally. This format provides the most accessible way to view its contents.
 
 ## Using this Repository
 
@@ -143,6 +143,7 @@ Now that you have copied this repository into your own GitHub, you are ready to 
 
 ## About Original Data Source
 
-The [Johns Hopkins Coronavirus Resource Center](https://coronavirus.jhu.edu/) (JHU CRC) tracked and compiled global COVID-19 pandemic data from January 22, 2020 and March 10, 2023. These data are publically available through their two GitHub repositories. We imported cumulative vaccination counts for the U.S. from their [GovEX/COVID-19](https://github.com/govex/COVID-19/tree/master/data_tables/vaccine_data) GitHub repository. The raw data used in the analysis script can be found in the data_tables/vaccine_data/us_data/time_series subdirectory ([original source](https://github.com/govex/COVID-19/blob/master/data_tables/vaccine_data/us_data/time_series/time_series_covid19_vaccine_us.csv)).
+From the [data.gov page](https://data.cdc.gov/Public-Health-Surveillance/Weekly-Rates-of-Laboratory-Confirmed-RSV-Hospitali/29hc-w46k/about_data) for this dataset:
+> The Respiratory Syncytial Virus Hospitalization Surveillance Network (RSV-NET) is a network that conducts active, population-based surveillance for laboratory-confirmed RSV-associated hospitalizations in children younger than 18 years of age and adults. RSV-NET, along with the Coronavirus Disease 2019 (COVID-19) Hospitalization Surveillance Network (COVID-NET) an the Influenza Hospitalization Surveillance network (FluSuv-NET), comprise the Respiratory Virus Hospitalization Surveillance Network (RESP-NET). The RESP-NET platforms have overlapping surveillance areas and use similar methods to collect data. Because the surveillance areas and age groups included in surveillance have changed over time, trends should be interpreted with caution. RSV-NET is CDC’s source for important data on rates of hospitalizations associated with RSV. Hospitalization rates show how many people in the surveillance area are hospitalized with RSV, compared to the total number of people residing in that area.
 
-The data dictionary provided by JHU CRC has been copied to this repository ([original source](https://github.com/govex/COVID-19/tree/master/data_tables/vaccine_data/us_data)). Additional details and methods for harmonizing the U.S. Census Bureau's 2010 to 2019 population projections with 2020 to 2023 vintages can be found in the "Population Estimates and Projections" subdirectory of this GitHub repository.
+The cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH’s very own PopHIVE project. Special thanks to [Professor Daniel Weinberger](https://ysph.yale.edu/profile/daniel-weinberger/) for allow us to adopt his plot code in this workshop.
