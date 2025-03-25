@@ -24,6 +24,7 @@ This is the only repository associated with this workshop. It contains all of th
 
 ### Overview Of Contents
 
+- **Workshop Slides with Comments:** `Workshop Slide Deck with Comments.pdf`
 - **Worked Through Example:** the *.qmd file constitues the code used to generate the *.html report
 - **Worked Through Example - associated files:** "Images" directory
 - **For cleaning and preparing the data:** "Data Cleaning" directory
@@ -31,6 +32,8 @@ This is the only repository associated with this workshop. It contains all of th
 - **Code for the workshop discussions and challenge questions:** `Discussion and Challenge Questions.R`
 - **R version:** 4.4.4
 - ``renv`` is included to reproduce the environment.
+
+**NOTE:** The workshop slide deck *.pdf includes comments at the bottom left of each slide. Users will need to download this file to their local device to view these comments.
 
 **NOTE:** The cleaning script has already been run to generate the necessary files. Users of this repository will only need to open the `Discussion and Challenge Questions.R` and `Worked Through Example.qmd` scripts. To get the most use out of the `Worked Through Example.qmd`, you will need to render the code to view the *.html output locally. This format provides the most accessible way to view its contents.
 
