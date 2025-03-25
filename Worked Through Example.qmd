@@ -34,9 +34,9 @@ With a better understanding of the syntax fundamentals, we will then get introdu
 
 We will close the workshop by asking [Yale's Clarity Platform](https://ai.yale.edu/yales-ai-tools-and-resources/clarity-platform) to reproduce our code from the plot image alone to exhibit how AI can be used to support data visualization work. Clarity is an AI chatbot that offers similar functions to OpenAI’s ChatGPT and Microsoft Copilot with additional data protection. Find out more about [Clarity's security](https://ai.yale.edu/yales-ai-tools-and-resources/clarity-platform/clarity-platform-security?check_logged_in=1) guidelines on "AI at Yale".
 
-The cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH's very own PopHIVE project. Special thanks to [Professor Daniel Weinberger](https://ysph.yale.edu/profile/daniel-weinberger/) for allow us to use his own plots in this workshop.
+The cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH's very own PopHIVE project. Special thanks to [Professor Daniel Weinberger](https://ysph.yale.edu/profile/daniel-weinberger/) for allow us to adopt his plot code in this workshop.
 
-## Set Up the Environment
+## Environment Set-Up and Data Description
 
 First, we will load the necessary libraries and any special functions used in the script.
 
@@ -55,7 +55,10 @@ suppressPackageStartupMessages({
   library("ggplot2")       # For creating static visualizations
   library("plotly")        # For interactive plots
   library("cowplot")       # ggplot add on for composing figures
+  library("tigris")        # Imports TIGER/Line shapefiles from the Census Bureau
+  library("sf")            # Handles "Special Features": spatial vector data
   library("RColorBrewer")  # Load Color Brewer color palettes
+  library("viridis")       # Load the Viridis color pallet
 })
 
 # Function to select "Not In"
@@ -83,9 +86,23 @@ df |> glimpse()
 
 ```
 
-**ADD quick description of the data**
+This workshop uses the Center for Disease Control's (CDC) [Respiratory Syncytial Virus Hospitalization Surveillance Network (RSV-NET)](https://www.cdc.gov/rsv/php/surveillance/rsv-net.html) surveillance data. It is one of the CDC's Respiratory Virus Hospitalization Surveillance Network (RESP-NET) Emerging Infections Programs (EIP). This version was downloaded from [data.gov](https://data.cdc.gov/Public-Health-Surveillance/Weekly-Rates-of-Laboratory-Confirmed-RSV-Hospitali/29hc-w46k/about_data) in January of 2025.
 
-season (July to June of the following year)
+RSV-NET conducts active, population-based surveillance for laboratory-confirmed RSV-associated hospitalizations. It contains stratification for geolocation, race/ethnicity, age, and sex. The cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH’s very own PopHIVE project. You will see that its contents differ slightly from what you would see on the data.gov website.
+
+Description of the variables:
+
+-   **Region** - geolocation at the state and [10 Health and Human Services Regions](https://www.hhs.gov/about/agencies/iea/regional-offices/index.html) (HHS) level.
+-   **Season** - the infection season of the abservation, defined to span from July to June of the following year.
+-   **Week Observed** - the week when the record was added, in `Date` format.
+-   **MMWRyear**, **MMWRweek**, **MMWRday** - the year, week, and day of the entry in Morbidity and Mortality Weekly Report (MMWR) format. MMWR is the standard epidemiologic week assigned by National Notifiable Diseases Surveillance System (NNDSS) in their disease reports ([MMWR Definition](https://ndc.services.cdc.gov/wp-content/uploads/MMWR_week_overview.pdf)).
+-   **Characteristic** and **Level** - the type of additional stratification and the group represented, respectively. i.e. "Characteristic = Sex; Level = Female".
+-   **Positives Detected** - the number of lab-confirmed RSV hospitalizations detected.
+-   **Scaled Detected** - the relative scale of RSV infections detected for inter-season comparison, controlling for each stratification. Outcomes were grouped by Region and Level then scaled using $\text{Positives Detected}/max(\text{Positives Detected})*100$.
+-   **Spline** - `smooth.spline(MMWRweek, Scaled Positives)` from the `stats` package. Parameters were automatically optimized by the algorithm as this is only for smoothing the trendline.
+-   **Kernel** - `locfit(Scaled Positives ~ lp(MMWRweek, nn = 0.3, h = 0.05, deg = 2))` from the `locfit` package. No rigorous method was applied to optimize parameters as this is only for smoothing the trendline.
+-   **Crude Rate** - the number of residents in a surveillance area who are hospitalized with laboratory-confirmed RSV divided by the total population estimate for that area per 100,000 persons.
+-   **Cumulative Crude Rate** - the crude rate added cumulatively over the course of one infection season.
 
 ## Basic Uses of `ggplot2()`
 
@@ -436,6 +453,7 @@ df |>
          y = "Positive RSV Tests\n(scaled and kernel smoothed)") +
     ylim(0, 100) +
     scale_color_brewer(type = "qual", palette = "Dark2") +
+    facet_grid(~factor(Level, levels = ages_ordered)) +
     # The following line not required for us to include.
     coord_cartesian()
     
@@ -499,12 +517,14 @@ For example, consider the following code. What happens if we change aspects of t
 
 ```{r}
 #| eval: FALSE
+
 ggplot(df, aes(x = MMWRweek, y = Kernel)) + 
   geom_line()
+
 ```
 
 | Operation | Layer aesthetics | Result |
-|----------------|:-----------------|:-------------------------------------|
+|------------------------|:-----------------------|:-----------------------|
 | Add | `aes(colour = Season)` | `aes(x = MMWRweek, y = Kernel, colour = Season)` |
 | Override | `aes(y = Level)` | `aes(x = MMWRweek, y = Level)` |
 | Remove | `aes(y = NULL)` | `aes(x = MMWRweek)` |
@@ -550,46 +570,133 @@ df |>
 
 ```
 
-Look at us, we are such `ggplot` experts now! High five! Oh wait a second, this is aesynchronous material... give yourself a high five for me :+1:.
+Look at us, we are such `ggplot` experts now! High five! Oh wait a second, for some of you this is asynchronous material... give yourself a high five for me :+1:
 
 ## Advanced Uses of `ggplot2()`
 
-In this section we will cover two advanced uses of `ggplot2` commonly used in public health: projecting data into a map and making the values intractable.
+In this section we will cover two advanced uses of `ggplot2` commonly used in public health: projecting data into a map and making the values interactive. These are topics well worth their own workshop, and I will not have time to do them justice here.
+
+The goal of the next two sections will be to introduce you to these rich topics. At the end of this section, you will hopefully find these topics more approachable and are better equipt to use them in your own work.
 
 ### Introduction to Map Projections with `ggoplot`
 
-### Introduction to Interactive Plotting with `plotly`
+Canonically, map projections are interpreting the curved surface of the earth into a flat plane. For our purposes, we need to render the polygons that represent this projection and associate them with metadata that will visualization our data. `ggplot2` comes with two different methods to do both these steps: `geom_polygon()` or `geom_sf()`.
+
+The first is not as robust as the second and, in fact, the second method is recommended by the `ggplot2` developers over `geom_polygon()` for this reason. We are therefore only going to cover `geom_sf()`.
+
+Before we apply this function, let's think first about what we are doing. Previously I mentioned that map projections are interpreting a curved shape into a flat plane. This projection will give us boundary points that are plotable on a linear Cartesian plane, called polygons. “Simple features”, from which we get "sf", are standard vector data produced by the Open Geospatial Consortium (OGC) that interpret this action into plotable polygons.
+
+Unfortunately, getting a file that contains the region boundaries we are looking for is a rather, shall we say, winding task. This problem gets compounded if we need our resource to contain granular information about the region, such as rivers, lakes, and topology, or even man-made infrastructure, such as roads, cities, or census boundaries.
+
+We're not going to bother with this problem for now. Our dataset contains information about select continguous U.S. states, and batches those trends into the HHS regions. Even though we do not need to be immediately concerned with how to plot Alaska and Hawaii into the same figure, we will include that as well.
+
+Here, we will reference the Topologically Integrated Geographic Encoding and Referencing, or [TIGER/Line Shapefiles](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html), provided by the U.S. Census Bureau. The R package `tigris` allows us to pull these files from the U.S. Census Bureau website and process them for our application.
 
 ```{r}
-#renderPlotly({
+#| message: FALSE
+#| warning: FALSE
+#| output: FALSE
 
-#map_data <- epic_ed_combo %>%
-#      filter(date == input$selected_date & Level == '<1 Years') %>%
-#      mutate(state = state.abb[match(geography, state.name)] ,
-             #Note, if >20%, cap at 20 for plotting!
-#           pct_RSV_ED_epic= if_else(pct_RSV_ED_epic>20,20, pct_RSV_ED_epic)  ) %>%
-#   filter(!is.na(state)) %>%
-#   as.data.frame()
+# Call the TIGER/Line Shapefiles from the Census Bureau.
+us_geo <- tigris::states(class = "sf", cb = TRUE) |>
+  # Translate the geometric locations for Alaska and Hawaii to plot underneath
+  # the contiguous states.
+  shift_geometry()
 
-# max.val <- max(epic_ed_combo$pct_RSV_ED_epic, na.rm=T)
-#pal1 <- viridis_pal()(4)
-#date.print <- input$selected_date
-
-#p1 <- usmap::plot_usmap(regions = "state", data = map_data, values = "pct_RSV_ED_epic") +
-#scale_fill_gradientn(
-    #colors = pal1,
-    #values = scales::rescale(c(0, 5, 10, 15, 20)),
-    #limits = c(0, 20),
-    #na.value = "#440154FF"
-  #) +
-  #ggtitle(paste("RSV ED Visit Percentage <1 year olds on", date.print))
-
-#ggplotly(p1)
-#})
+head(us_geo)
 
 ```
 
+```{r}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+
+head(us_geo)
+
+```
+
+In this dataset, we see that there are various state identifiers
+
+-   **STATEFP** - Federal Information Processing System (FIPS) ID
+-   **STATENS** - United States Geological Survey (USGS) ID
+-   **AFFGEOID** - American Fact Finder Geographic Identifiers
+-   **GEOID** - the standard geographic identifiers
+
+and land type identifiers
+
+-   **LSAD** - [Legal/Statistical Area Description (LSAD)](https://www2.census.gov/geo/pdfs/reference/LSADCodes.pdf)
+-   **ALAND** - land size in square miles
+-   **AWATER** - water size in square miles
+-   **Geometry** - the longitude and latitude for the polygon vertices.
+
+Together, these are used by `geom_sf()` to create map projections out of our spacial data. And believe it or not, that was the hardest part about map projections. Once we have these polygons, we are well on our way to visualizing our data on a map.
+
+Going back to our running example, let's show the distribution of infection trends near the peak of the 2024-25 season, around weeks 24 to 26.
+
+```{r}
+
+subset <- df |>
+  # Keep only the states and the time-frame we want to plot.
+  filter(Region %in% c(datasets::state.name, "District of Columbia"),
+         Season %in% "2024-25", MMWRweek %in% c(24:26))
+
+# Combine the two datasets by Region in df and NAME in us_geo.
+geo_df <- us_geo |> 
+  left_join(subset, c("NAME" = "Region")) |>
+  # Using GEOID, we will only keep the U.S. states.
+  filter(GEOID < 60)
+
+map_plot <- geo_df |>
+  # Color the polygon with the number of RSV positives tested.
+  ggplot(aes(fill = Kernel), color = "black") +
+    # Apply the SF compatible Geometry.
+    geom_sf() +
+    # Scale the aesthetics to apply the viridis colors and do not
+    # add colors for the NA's
+    scale_fill_viridis(direction = -1, na.value = "grey92") +
+    labs(fill = NULL, title = "Peak 2024-25 Season RSV Infection Trends\nResults Scaled and Gaussian Kernel Smoothed") +
+    # Apply the SF compatible Coordinates.
+    coord_sf() +
+    theme_map()
+
+map_plot
+
+```
+
+Voilà!
+
+::: {.callout-important title="Geometry and Statistic Layers Dictate the Aesthetics Mapping"}
+`ggplot` is a convenient way to render a plot, but it is not the most efficient package option out there! If you are looking for something that is faster and more flexible, you might want to check out packages like `leaflet` ([Cran R documentation](https://cran.r-project.org/web/packages/leaflet/index.html)).
+:::
+
+### Introduction to Interactive Plotting with `plotly`
+
+A static graphic can communicate a lot about your data, but with html widgets, like `plotly`, you can make the plot user interactive. These widgets allow actions like zooming, hovering, and selecting variables in the legend to be displayed. There are different widgets to choose from, and usually you will pick one that is best suited to make the graphic you intend. You can find some inspiration from the [R Graph Gallery](https://r-graph-gallery.com/interactive-charts.html).
+
+Today, I will show you how to apply one of the most commonly used interactive packages, `plotly`. This package is cross platform compatible and can be used in Python, Julia, and MATLAB. It has its own standalone function for plot generation that come with more options, but if you are looking to quickly make a `ggplot()` interactive all you need to do is wrap it with `ggplotly()`.
+
+You can find more about `plotly` and the kinds of interactive plots it can generate with `ggplot()` objections in their documentaion: [Plotly R Open Source Graphing Library](https://plotly.com/r/) and [Plotly ggplot2 Open Source Graphing Library](https://plotly.com/ggplot2/).
+
+```{r}
+
+ggplotly(map_plot)
+
+```
+
+## Yale's Clarity AI
+
+We will now ask [Yale's Clarity Platform](https://ai.yale.edu/yales-ai-tools-and-resources/clarity-platform) to reproduce the code from one of our plots using the image alone.
+
+1.  Take a screenshot of one of the plots from the workshop or one of your own.
+2.  Navigate to [ai-chat.yale.edu/signin-oidc](https://ai-chat.yale.edu/signin-oidc).
+3.  Upload the screenshot into the chat and ask ” Suggest R code that could make this plot in ggplot2.”
+
+**Discussion:** How did the AI chatbot do?
+
 ## Challenge Questions
+
+You can find the code for these questions and their suggested solutions in `Discussion and Challenge Questions.R`.
 
 1.  In the worked through example we leverage two of the three distinguishing variables: Season and Characteristic Level. In this questions, we want to focus on the third one, Region. Using the final line-graph code from the worked through example, add a row-wise facet to compare two states or HHS regions.
 
@@ -598,11 +705,11 @@ In this section we will cover two advanced uses of `ggplot2` commonly used in pu
     a.  Can you modify this approach so that we no longer require the external dataset, thus simplifying our code?
     b.  Now try using `stat_summary(filtered_data, geom = "point", fun = "max", color = "red")` instead of `geom_point()`. If you only filter to MMWRyear, do you get the same result, and if not why?
 
-3.  We want to see how many counties called "Adams" are represented in the data set.
+3.  In our line graph we faceted by age groups. But we see that if we apply a simple **Facet** layer to our map plot the NA values get plotted in their own panel.
 
-    a)  Subset the data set by string matches in `County` and find how many rows you see. Remember that each county is expected to have 39 different dates reported.
-    b)  Table your subset results by `County` and `Province_State`. Does this change the answer you got from part a?
+    a)  Why is this happening?
+    b)  Fix this code to prevent this panel from being generated.
 
 ## Appendix
 
-This workshop was generated using R (v 4.4.4) in the RStudio IDE (v 2024.12.1+563). `renv` was used to store all the relevant packages and package versions with the workshop codespace. All of the workshop materials can be accessed on the ysph-dsde GitHub: [Data Visualization with ggplo2](https://github.com/ysph-dsde/Data-Visualization-with-ggplot2/).
+This workshop was generated using R (v 4.4.4) in the RStudio IDE (v 2024.12.1+563). `renv` was used to store all the relevant packages and package versions with the workshop codespace. All of the workshop materials can be accessed on the ysph-dsde GitHub: [Data Visualization with ggplo2](https://github.com/ysph-dsde/Data-Visualization-with-ggplot2/). All relevant citations for this document can be found in the **Appendix** of the slides.

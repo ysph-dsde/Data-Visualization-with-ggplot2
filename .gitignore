@@ -6,6 +6,6 @@
 .RData
 .Rproj.user
 .Ruserdata
-References.docx
+*.docx
 *_files
 *.html

@@ -255,8 +255,8 @@ geo_df <- us_geo |>
 
 
 ## In our line graph we faceted by age groups. But we see that if we apply
-## a simple Facet layer to our maps plot that the NA values get plotted
-## in their own panel.
+## a simple Facet  layer to our map plot the NA values get plotted in their 
+## own panel.
 ## 
 ## a. Why is this happening?
 ## b. Fix this code to prevent this panel from being generated.
@@ -265,7 +265,7 @@ geo_df <- us_geo |>
 geo_df |>
   ggplot(aes(fill = Kernel), color = "black") +
     geom_sf() +
-    scale_fill_viridis(direction = -1, na.value = NA) +
+    scale_fill_viridis(direction = -1, na.value = "grey92") +
     labs(fill = NULL, title = "Peak 2024-25 Season RSV Infection Trends\nResults Scaled and Gaussian Kernel Smoothed") +
     facet_grid(~factor(Level, levels = ages_ordered)) + 
     coord_sf() +
@@ -386,7 +386,7 @@ ggplot() +
   # and because it comes first we cannot place it in ggplot() without drawing
   # an error.
   geom_sf(data = na.omit(geo_df), aes(fill = Kernel), color = "black") +
-  scale_fill_viridis(direction = -1, na.value = NA) +
+  scale_fill_viridis(direction = -1, na.value = "grey92") +
   labs(fill = NULL, title = "Peak 2024-25 Season RSV Infection Trends\nResults Scaled and Gaussian Kernel Smoothed") +
   facet_grid(~factor(Level, levels = ages_ordered)) + 
   coord_sf() +
