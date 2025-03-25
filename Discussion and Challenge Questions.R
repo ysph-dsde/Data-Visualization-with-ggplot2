@@ -46,7 +46,14 @@ suppressPackageStartupMessages({
 # The RSV-NET Infections dataset used in the workshop.
 df <- read_parquet(file.path(getwd(), "RSV-NET Infections.gz.parquet"))
 
+# Dataset provided with the ggplot2 package instillation.
+data("diamonds")
 
+# Call the TIGER/Line Shapefiles from the Census Bureau.
+us_geo <- tigris::states(class = "sf", cb = TRUE) |>
+  # Translate the geometric locations for Alaska and Hawaii to plot underneath
+  # the contiguous states.
+  shift_geometry()
 
 
 ## ----------------------------------------------------------------
@@ -125,8 +132,6 @@ df |>
 ## We will be comparing the diamonds price against its carat. Both variables
 ## will need to be transformed using a base 10 log.
 
-data("diamonds")
-
 # The basic, un-transformed plot.
 ggplot(diamonds, aes(carat, price)) +
   stat_bin2d() + 
@@ -175,7 +180,7 @@ df$Region |> unique()
 ## Using the final line-graph code from the worked through example, add a 
 ## row-wise facet to compare two states or HHS regions.
 
-# Modify the following blocks code.
+# Modify the following block of code.
 df |>
   filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
@@ -235,9 +240,36 @@ df |>
 
 
 ## ---------------------
-## QUESTION #3
+## QUESTION #3 - MAP PROJECTIONS
+
+# Copying the data subsetting code.
+subset <- df |>
+  filter(Region %in% c(datasets::state.name, "District of Columbia"),
+         Season %in% "2024-25", MMWRweek %in% c(24:26))
+
+# Copying the data joining and filtering code adding the SF polygons to our
+# RSV infections metadata.
+geo_df <- us_geo |> 
+  left_join(subset, c("NAME" = "Region")) |>
+  filter(GEOID < 60)
 
 
+## In our line graph we faceted by age groups. But we see that if we apply
+## a simple Facet layer to our maps plot that the NA values get plotted
+## in their own panel.
+## 
+## a. Why is this happening?
+## b. Fix this code to prevent this panel from being generated.
+
+# Modify the following block of code.
+geo_df |>
+  ggplot(aes(fill = Kernel), color = "black") +
+    geom_sf() +
+    scale_fill_viridis(direction = -1, na.value = NA) +
+    labs(fill = NULL, title = "Peak 2024-25 Season RSV Infection Trends\nResults Scaled and Gaussian Kernel Smoothed") +
+    facet_grid(~factor(Level, levels = ages_ordered)) + 
+    coord_sf() +
+    theme_map()
 
 
 
@@ -333,9 +365,32 @@ df %>%
 
 
 ## ---------------------
-## QUESTION #3
+## QUESTION #3 - MAP PROJECTIONS
 
+## a. Why is this happening?
+## 
+## When we joined the polygon vector dataset with our metadata dataset we
+## induced NA's for the missing states. These get registered as a new outcome
+## of Level to plot separately.
 
+## b. Fix this code to prevent this panel from being generated.
+
+ggplot() +
+  # Layers are plotted one on top of another. If we want the background to
+  # show the states, then we add our new layer before the data is abstracted
+  # onto the map.
+  geom_sf(data = filter(us_geo, GEOID < 60)) +
+  # The Data layer will be inherited from the previous geom_sf(). Therefore
+  # we must override the inherited setting. Notice also that we need to
+  # denote the aesthetic here too. Kernel is not present in the us_geo dataset,
+  # and because it comes first we cannot place it in ggplot() without drawing
+  # an error.
+  geom_sf(data = na.omit(geo_df), aes(fill = Kernel), color = "black") +
+  scale_fill_viridis(direction = -1, na.value = NA) +
+  labs(fill = NULL, title = "Peak 2024-25 Season RSV Infection Trends\nResults Scaled and Gaussian Kernel Smoothed") +
+  facet_grid(~factor(Level, levels = ages_ordered)) + 
+  coord_sf() +
+  theme_map()
 
 
 
