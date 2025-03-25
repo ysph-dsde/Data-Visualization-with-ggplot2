@@ -524,7 +524,7 @@ ggplot(df, aes(x = MMWRweek, y = Kernel)) +
 ```
 
 | Operation | Layer aesthetics | Result |
-|------------------------|:-----------------------|:-----------------------|
+|----|:---|:---|
 | Add | `aes(colour = Season)` | `aes(x = MMWRweek, y = Kernel, colour = Season)` |
 | Override | `aes(y = Level)` | `aes(x = MMWRweek, y = Level)` |
 | Remove | `aes(y = NULL)` | `aes(x = MMWRweek)` |
