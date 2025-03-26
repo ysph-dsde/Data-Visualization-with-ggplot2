@@ -4,3 +4,5 @@
 .Rhistory
 .Rprofile
 .Rproj.user/
+/.quarto/
+/_site/
