@@ -12,3 +12,5 @@
 *.docx
 *.html
 *_files
+# Temporary
+.github
