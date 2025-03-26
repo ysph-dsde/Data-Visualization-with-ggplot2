@@ -4,14 +4,21 @@
     "href": "Worked-Through-Example.html",
     "title": "Data Visualization with ggplot2",
     "section": "",
-    "text": "In this workshop we delve deeper into the domain specific language of statistical graphics that underpins the tidyverse ggplot2 package syntax: the “Grammar of Graphics”. We will explore each discrete grammar layer using laboratory-confirmed RSV hospitalizations data collected by the CDC’s Respiratory Virus Hospitalization Surveillance Network (RESP-NET) surveillance program.\nWith a better understanding of the syntax fundamentals, we will then get introduced to some advanced uses of ggplot2 that are commonly used in public health:\n\nMaking plots interactive with plotly\nProjecting data to a map\n\nWe will close the workshop by asking Yale’s Clarity Platform to reproduce our code from the plot image alone to exhibit how AI can be used to support data visualization work. Clarity is an AI chatbot that offers similar functions to OpenAI’s ChatGPT and Microsoft Copilot with additional data protection. Find out more about Clarity’s security guidelines on “AI at Yale”.\nThe cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH’s very own PopHIVE project. Special thanks to Professor Daniel Weinberger for allow us to adopt his plot code in this workshop."
+    "text": "Codespace for Discussion and Challenge Questions \n Complete Slide Deck \n Repo References"
+  },
+  {
+    "objectID": "Worked-Through-Example.html#download-materials",
+    "href": "Worked-Through-Example.html#download-materials",
+    "title": "Data Visualization with ggplot2",
+    "section": "",
+    "text": "Codespace for Discussion and Challenge Questions \n Complete Slide Deck \n Repo References"
   },
   {
     "objectID": "Worked-Through-Example.html#introduction",
     "href": "Worked-Through-Example.html#introduction",
     "title": "Data Visualization with ggplot2",
-    "section": "",
-    "text": "In this workshop we delve deeper into the domain specific language of statistical graphics that underpins the tidyverse ggplot2 package syntax: the “Grammar of Graphics”. We will explore each discrete grammar layer using laboratory-confirmed RSV hospitalizations data collected by the CDC’s Respiratory Virus Hospitalization Surveillance Network (RESP-NET) surveillance program.\nWith a better understanding of the syntax fundamentals, we will then get introduced to some advanced uses of ggplot2 that are commonly used in public health:\n\nMaking plots interactive with plotly\nProjecting data to a map\n\nWe will close the workshop by asking Yale’s Clarity Platform to reproduce our code from the plot image alone to exhibit how AI can be used to support data visualization work. Clarity is an AI chatbot that offers similar functions to OpenAI’s ChatGPT and Microsoft Copilot with additional data protection. Find out more about Clarity’s security guidelines on “AI at Yale”.\nThe cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH’s very own PopHIVE project. Special thanks to Professor Daniel Weinberger for allow us to adopt his plot code in this workshop."
+    "section": "Introduction",
+    "text": "Introduction\nIn this workshop we delve deeper into the domain specific language of statistical graphics that underpins the tidyverse ggplot2 package syntax: the “Grammar of Graphics”. We will explore each discrete grammar layer using laboratory-confirmed RSV hospitalizations data collected by the CDC’s Respiratory Virus Hospitalization Surveillance Network (RESP-NET) surveillance program.\nWith a better understanding of the syntax fundamentals, we will then get introduced to some advanced uses of ggplot2 that are commonly used in public health:\n\nMaking plots interactive with plotly\nProjecting data to a map\n\nWe will close the workshop by asking Yale’s Clarity Platform to reproduce our code from the plot image alone to exhibit how AI can be used to support data visualization work. Clarity is an AI chatbot that offers similar functions to OpenAI’s ChatGPT and Microsoft Copilot with additional data protection. Find out more about Clarity’s security guidelines on “AI at Yale”.\nThe cleaned and harmonized version of the RSV-NET dataset was compiled as part of the YSPH’s very own PopHIVE project. Special thanks to Professor Daniel Weinberger for allow us to adopt his plot code in this workshop."
   },
   {
     "objectID": "Worked-Through-Example.html#environment-set-up-and-data-description",
