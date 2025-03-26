@@ -45,7 +45,7 @@ In this workshop you will need to access the R code we have prepared for the in-
 
 {{< downloadthis "Discussion and Challenge Questions Download_03.26.2025.zip" label="Codespace for Discussion and Challenge Questions" id=download_btn >}}
 
-Download the complete slide deck with annotations and the in-person workshop handout. Comments were saved in the bottom left of each slide.
+Download the complete slide deck with annotations and the in-person workshop handout. Comments were saved in the bottom left of each slide, and references for this webpage are in its **Appendix**.
 
 {{< downloadthis "Workshop Slide Deck with Comments.pdf" label="Complete Slide Deck" id=download_btn >}}
 
@@ -122,15 +122,15 @@ RSV-NET conducts active, population-based surveillance for laboratory-confirmed 
 Description of the variables:
 
 -   **Region** - geolocation at the state and [10 Health and Human Services Regions](https://www.hhs.gov/about/agencies/iea/regional-offices/index.html) (HHS) level.
--   **Season** - the infection season of the abservation, defined to span from July to June of the following year.
+-   **Season** - the infection season of the observation, defined to span from July to June of the following year.
 -   **Week Observed** - the week when the record was added, in `Date` format.
--   **MMWRyear**, **MMWRweek**, **MMWRday** - the year, week, and day of the entry in Morbidity and Mortality Weekly Report (MMWR) format. MMWR is the standard epidemiologic week assigned by National Notifiable Diseases Surveillance System (NNDSS) in their disease reports ([MMWR Definition](https://ndc.services.cdc.gov/wp-content/uploads/MMWR_week_overview.pdf)).
+-   **MMWRyear**, **MMWRweek**, **MMWRday** - the year, week, and day of the entry in Morbidity and Mortality Weekly Report (MMWR) format. MMWR is the standard epidemiological week assigned by National Notifiable Diseases Surveillance System (NNDSS) in their disease reports ([MMWR Definition](https://ndc.services.cdc.gov/wp-content/uploads/MMWR_week_overview.pdf)).
 -   **Characteristic** and **Level** - the type of additional stratification and the group represented, respectively. i.e. "Characteristic = Sex; Level = Female".
 -   **Positives Detected** - the number of lab-confirmed RSV hospitalizations detected.
 -   **Scaled Detected** - the relative scale of RSV infections detected for inter-season comparison, controlling for each stratification. Outcomes were grouped by Region and Level then scaled using $\text{Positives Detected}/max(\text{Positives Detected})*100$.
 -   **Spline** - `smooth.spline(MMWRweek, Scaled Positives)` from the `stats` package. Parameters were automatically optimized by the algorithm as this is only for smoothing the trendline.
 -   **Kernel** - `locfit(Scaled Positives ~ lp(MMWRweek, nn = 0.3, h = 0.05, deg = 2))` from the `locfit` package. No rigorous method was applied to optimize parameters as this is only for smoothing the trendline.
--   **Crude Rate** - the number of residents in a surveillance area who are hospitalized with laboratory-confirmed RSV divided by the total population estimate for that area per 100,000 persons.
+-   **Crude Rate** - the number of residents in a surveillance area who are hospitalized with laboratory-confirmed RSV infections divided by the total population estimated for that area per 100,000 persons.
 -   **Cumulative Crude Rate** - the crude rate added cumulatively over the course of one infection season.
 
 ## Basic Uses of `ggplot2()`
@@ -458,7 +458,7 @@ Up until this point, we have covered layers that attribute variables to geometri
 
 It is the **Coordinates** layer that then plots these values on a graph. It's important to appreciate this subtlety because some scaled or statistically transformed values will look entirely different if the wrong coordinate system is applied. Such as, if we attempted to plot an angle on a Cartesian plane in Euclidean space instead of in polar coordinates.
 
-[![Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.](Images/Coordinates_Data%20Visualization%20Bookdown%20Figure%205.5.png)](https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord)
+[![Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.](Images/Coordinates_Data Visualization Bookdown Figure 5.5.png)](https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord)
 
 **Coordinate** layer functions fall into two buckets:
 
@@ -467,7 +467,7 @@ It is the **Coordinates** layer that then plots these values on a graph. It's im
 
 Applying the Cartesian, polar, and transformed coordinates is reasonably straightforward, and we will introduce the topic of map projections today. Keep in mind that the **Coordinate** layer plays an abstract role in the plot composite making for some key application notes that the user will need to be aware of. More on this subject can be explored in [Chapter 15 Coordinate systems](https://ggplot2-book.org/coord.html) of *ggplot2: Elegant Graphics for Data Analysis*.
 
-Previously, we mentioned that axis limits can be applied in **Scales**, but by doing so we unintetionally skew the results. Instead, it is better to "zoom" into a plot using the **Coordinates** layer. In a similar vein, if we want to swap the axes our $x$ and $y$ variables get plotted to, we want to use `coord_flip()` instead of changing `aes(x = x_var, y = y_var)` to `aes(x = y_var, y = x_var)`.
+Previously, we mentioned that axis limits can be applied in **Scales**, but by doing so we unintentionally skew the results. Instead, it is better to "zoom" into a plot using the **Coordinates** layer. In a similar vein, if we want to swap the axes our $x$ and $y$ variables get plotted to, we want to use `coord_flip()` instead of changing `aes(x = x_var, y = y_var)` to `aes(x = y_var, y = x_var)`.
 
 ```{r layers_coordinates}
 #| eval: FALSE
@@ -501,13 +501,13 @@ As with any grammar, there are different ways we can make a statement. Say we ha
 
 ### The **Theme** Layer
 
-The **Theme** layer gives the users control over non-data aspects of the plot: i.e. styling the fonts, axes ticks, panel strips, backgrounds, location (or the exclusion) of the legend, etc. It’s used to format the plot to make it visually appealing or match intended design schemes. Unlike every other layer described, **Theme** will not change how values are transformed, their perceptual properties, or how geometries get rendered.
+The **Theme** layer gives the users control over non-data aspects of the plot: i.e. styling the fonts, axes ticks, panel strips, backgrounds, location (or the exclusion) of the legend, etc. It is used to format the plot, making it visually appealing or match intended design schemes. Unlike every other layer described, **Theme** will not change how values are transformed, their perceptual properties, or how geometries get rendered.
 
-How the user intends to use **Themes** will depend on where in the data procesing cycle they are performing visualization, and how they want their polished plots to look. It is therefore not likely to be helpful if I get granular about the different function arguments in **Themes**. Instead, I encourage students to explore the layer reference page, where they can peruse details for all the possible function arguments at their leisure: [Modify components of a theme](https://ggplot2.tidyverse.org/reference/theme.html#ref-usage).
+How the user intends to use **Themes** will depend on where in the data processing cycle they are performing visualization, and how they want their polished plots to look. It is therefore not likely to be helpful if I get granular about the different function arguments in **Themes**. Instead, I encourage students to explore the layer reference page, where they can peruse details for all the possible function arguments at their leisure: [Modify components of a theme](https://ggplot2.tidyverse.org/reference/theme.html#ref-usage).
 
 `ggplot2` comes with numerous theme that get installed with the package: [Complete themes](https://ggplot2.tidyverse.org/reference/ggtheme.html). There are also numerous community developed themes that you can load, some of which have been curated by R Charts: [Themes in ggplot2](https://r-charts.com/ggplot2/themes/).
 
-Each time you make a plot, the default is `theme_gray()`. As before, you do not need to explicitely write this out if you do not intend to change the default settings. In our example, we want use another, more visually appealing theme that better displays our results. We will use another `ggplot` provided theme: `theme_linedraw()`.
+Each time you make a plot, the default is `theme_gray()`. As before, you do not need to explicitly write this out if you do not intend to change the default settings. In our example, we want use another, more visually appealing theme that better displays our results. We will use another `ggplot` provided theme: `theme_linedraw()`.
 
 ```{r layers_theme}
 #| fig-width: 10
@@ -538,7 +538,7 @@ Say you regularly generate plots that you want to apply the same custom **Theme*
 
 ### Overlaying Layers
 
-Now that we have become acclimated to each layer that constitutes one cohesive graph, we are ready to discuss how to effectively build more complex graphs by overlaying additional layers. Earlier I hinted that the expressions for each layer stands alone as it's own object in the programming environment. When a graph is rendered by `ggplot2` it's going to compress these layers one on top of another sequentially.
+Now that we have become acclimated to each layer that constitutes one cohesive graph, we are ready to discuss how to effectively build more complex graphs by overlaying additional layers. Earlier I hinted that the expressions for each layer stands alone as its own object in the programming environment. When a graph is rendered by `ggplot2` its going to compress these layers one on top of another sequentially.
 
 This is all well and good if the plots we are generating contain the same **Data** and **Mapping** settings, but what if they do not? What if we want to plot a new **Geometry** or **Statistic** layer that doesn't use the same settings used by other layers? Every time you add a new layer, you have the opportunity to override the inherited settings that were given in the leading plot object, `ggplot()`.
 
@@ -563,7 +563,7 @@ ggplot(df, aes(x = MMWRweek, y = Kernel)) +
 It is therefore best practice to assign the **Data** or **Mapping** in the leading `ggplot()` plot object when you want those settings carried forward to all subsequent layers. When you need to specify new settings for select **Geometric** or **Statistic** layers, then you can specify those mappings in that layer, overriding any previous designation. You can find more information about plot object layering in `ggplot` in [Chapter 13 Build a plot layer by layer](https://ggplot2-book.org/layers.html#sec-plots-and-layers) in *ggplot2: Elegant Graphics for Data Analysis*.
 
 ::: {.callout-tip title="Code Like a Pro"}
-The ability to treat each layer as it's own object in the coding environment allows for flexible and adaptive programming. For example, you can predefined the settings to generating a smoothed line that you apply to different `ggplot()` objects, leaning on inherited **Data** and/or aesthetics **Mappings** given in each.
+The ability to treat each layer as its own object in the coding environment allows for flexible and adaptive programming. For example, you can predefined the settings to generating a smoothed line that you apply to different `ggplot()` objects, leaning on inherited **Data** and/or aesthetics **Mappings** given in each.
 
 You can find more information about plot object layering in `ggplot` in [Chapter 18 Programming with ggplot2](https://ggplot2-book.org/programming.html) in *ggplot2: Elegant Graphics for Data Analysis*.
 :::
