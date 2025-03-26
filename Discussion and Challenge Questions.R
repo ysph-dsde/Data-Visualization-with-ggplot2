@@ -21,6 +21,7 @@
 
 # NOTE: renv initializing might need to be run twice after the repo is
 #       first copied.
+#renv::init()
 renv::restore()
 
 

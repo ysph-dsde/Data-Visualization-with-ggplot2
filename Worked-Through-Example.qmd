@@ -1,11 +1,9 @@
 ---
   title: "Data Visualization with ggplot2"
   subtitle: "Worked Through Example"
-  title-block-banner: Images/Workshop_Materials_Header_Background.png
   author:
   - name: Shelby Golden
     degrees: M.S.
-    url: https://outlook.office365.com/owa/calendar/DataScienceDataEquityOfficeHours@yale.edu/bookings/
     email: shelby.golden@yale.edu
     affiliations:
       - name: Yale School of Public Health Data Science and Data Equity (DSDE)
@@ -24,11 +22,31 @@
   toc: true
   toc-depth: 3
 ---
+
 ## Download Materials
 
+In this workshop you will need to access the R code we have prepared for the in-workshop discussion and after-workshop challenge questions. This assumes that you have downloaded [R](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) to your local device. After you download the code, you will need to:
+
+1.  Move the unzipped directory to the file location you wish to house the project.
+
+2.  Open `Data-Visualization-with-ggplot2.Rproj`.
+
+3.  Open `Discussion and Challenge Questions.R`.
+
+4.  Initialize the environment in the R console by running:
+
+    ```         
+    renv::init()               # initialize the project
+    renv::restore()            # download packages and their version saved in the lockfile.
+    ```
+
+    **NOTE:** If you are asked to update packages, say no. The `renv()` is intended to recreate the same environment under which the project was created, making it reproducible. You are ready to proceed when running `renv::restore()` gives the output `- The library is already synchronized with the lockfile.`. You can read more about `renv()` in their [vignette](https://rstudio.github.io/renv/articles/renv.html).
+
 {{< downloadthis "Discussion and Challenge Questions Download_03.26.2025.zip" label="Codespace for Discussion and Challenge Questions" id=download_btn >}}
+
+The complete slide deck can be downloaded here as well. Comments were saved in the bottom left of each slide.
+
 {{< downloadthis "Workshop Slide Deck with Comments.pdf" label="Complete Slide Deck" id=download_btn >}}
-{{< downloadthis References.pdf label="Repo References" id=download_btn >}}
 
 ## Introduction
 
@@ -54,6 +72,7 @@ First, we will load the necessary libraries and any special functions used in th
 
 # NOTE: renv initializing might need to be run twice after the repo is
 #       first copied.
+#renv::init()
 renv::restore()
 
 suppressPackageStartupMessages({
