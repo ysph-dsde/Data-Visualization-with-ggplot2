@@ -1,23 +1,21 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: "Data Visualization with ggplot2 Workshop"
+  title: "C-Cubed Workshops"
   page-navigation: true
   navbar:
-    search: true
     left:
-      - text: Home
+      - text: Data Visualization with ggplot2
         href: Worked-Through-Example.qmd
       - text: Public Health DSDE at Yale
         href: https://ysph.yale.edu/public-health-research-and-practice/research-centers-and-initiatives/public-health-data-science-and-data-equity/
         target: _blank
 
-language: 
-  search-text-placeholder: Search  # Placeholder text for Search
-
 format:
   html:
+    theme: sandstone
     toc: true
 
 
