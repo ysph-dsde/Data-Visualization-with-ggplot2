@@ -30,7 +30,10 @@ suppressPackageStartupMessages({
   library("ggplot2")       # For creating static visualizations
   library("plotly")        # For interactive plots
   library("cowplot")       # ggplot add on for composing figures
+  library("tigris")        # Imports TIGER/Line shapefiles from the Census Bureau
+  library("sf")            # Handles "Special Features": spatial vector data
   library("RColorBrewer")  # Load Color Brewer color palettes
+  library("viridis")       # Load the Viridis color pallet
 })
 
 

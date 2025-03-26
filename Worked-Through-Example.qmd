@@ -13,7 +13,9 @@
       - url: ysph.yale.edu/dsde
   date: 03/27/2025
   date-format: long
-  format: html
+  format: 
+    html:
+      css: style.css
   editor: visual
   from: markdown+emoji
   markdown: 
@@ -22,6 +24,11 @@
   toc: true
   toc-depth: 3
 ---
+## Download Materials
+
+{{< downloadthis "Discussion and Challenge Questions Download_03.26.2025.zip" label="Codespace for Discussion and Challenge Questions" id=download_btn >}}
+{{< downloadthis "Workshop Slide Deck with Comments.pdf" label="Complete Slide Deck" id=download_btn >}}
+{{< downloadthis References.pdf label="Repo References" id=download_btn >}}
 
 ## Introduction
 
@@ -524,7 +531,7 @@ ggplot(df, aes(x = MMWRweek, y = Kernel)) +
 ```
 
 | Operation | Layer aesthetics | Result |
-|----|:---|:---|
+|------------------------|:-----------------------|:-----------------------|
 | Add | `aes(colour = Season)` | `aes(x = MMWRweek, y = Kernel, colour = Season)` |
 | Override | `aes(y = Level)` | `aes(x = MMWRweek, y = Level)` |
 | Remove | `aes(y = NULL)` | `aes(x = MMWRweek)` |
