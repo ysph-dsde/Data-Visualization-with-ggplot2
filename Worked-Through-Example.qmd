@@ -44,9 +44,11 @@ In this workshop you will need to access the R code we have prepared for the in-
 
 {{< downloadthis "Discussion and Challenge Questions Download_03.26.2025.zip" label="Codespace for Discussion and Challenge Questions" id=download_btn >}}
 
-The complete slide deck can be downloaded here as well. Comments were saved in the bottom left of each slide.
+Download the complete slide deck with annotations and the in-person workshop handout. Comments were saved in the bottom left of each slide.
 
 {{< downloadthis "Workshop Slide Deck with Comments.pdf" label="Complete Slide Deck" id=download_btn >}}
+
+{{< downloadthis "Handout.pdf" label="Handout" id=download_btn >}}
 
 ## Introduction
 
