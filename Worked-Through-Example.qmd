@@ -1,6 +1,7 @@
 ---
   title: "Data Visualization with ggplot2"
   subtitle: "Worked Through Example"
+  title-block-banner: true
   author:
   - name: Shelby Golden
     degrees: M.S.
