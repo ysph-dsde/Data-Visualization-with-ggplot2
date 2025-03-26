@@ -1,9 +1,8 @@
 project:
   type: website
-  output-dir: docs
 
 website:
-  title: "Mukherjee Lab"
+  title: "Data Visualization with ggplot2 Workshop"
   page-navigation: true
   navbar:
     search: true
