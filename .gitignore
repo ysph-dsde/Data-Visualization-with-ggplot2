@@ -8,6 +8,7 @@
 .Ruserdata
 /.quarto/
 /docs/
+/_site/
 *.docx
 *.html
 *_files
