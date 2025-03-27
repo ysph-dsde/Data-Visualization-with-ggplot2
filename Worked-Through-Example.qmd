@@ -40,9 +40,11 @@ In this workshop you will need to access the R code we have prepared for the in-
     ```
 
 **NOTE:** If you are asked to update packages, say no. The `renv()` is intended to recreate the same environment under which the project was created, making it reproducible. You are ready to proceed when running `renv::restore()` gives the output:
-```
+
+```         
 - The library is already synchronized with the lockfile.
 ```
+
 You can read more about `renv()` in their [vignette](https://rstudio.github.io/renv/articles/renv.html).
 
 {{< downloadthis "Discussion and Challenge Questions Download_03.26.2025.zip" label="Codespace for Discussion and Challenge Questions" id=download_btn >}}
@@ -460,16 +462,7 @@ Up until this point, we have covered layers that attribute variables to geometri
 
 It is the **Coordinates** layer that then plots these values on a graph. It's important to appreciate this subtlety because some scaled or statistically transformed values will look entirely different if the wrong coordinate system is applied. Such as, if we attempted to plot an angle on a Cartesian plane in Euclidean space instead of in polar coordinates.
 
-```{=html}
-<div>
-    <div style="float: center; position: relative; top: 0px; padding: 30px;">
-    <a href="https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord">
-      <img src="Images/Coordinates_Data Visualization Bookdown Figure 5.5.png" alt="Coordinates Figure from Data Visualization Bookdown" width=730px height=auto>
-    </a>
-    <figcaption>Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.</figcaption>
-    </div>
-</div>
-```
+[![Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.](Images/Coordinates_Data Visualization Bookdown Figure 5.png)](https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord)
 
 **Coordinate** layer functions fall into two buckets:
 
