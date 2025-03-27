@@ -12,7 +12,9 @@
       - url: ysph.yale.edu/dsde
   date: 03/27/2025
   date-format: long
-  format: html
+  format: 
+    html:
+      css: styles.css
   editor: visual
   from: markdown+emoji
   markdown: 
@@ -143,7 +145,7 @@ Description of the variables:
 <div>
     <div style="float: left; position: relative; top: 0px; padding: 30px;">
     <a href="https://www.youtube.com/watch?v=h29g21z0a68">
-      <img src="images/All_Layers.png" alt="Layers of the Grammar of Graphics" width=350px height=auto>
+      <img src="images/All Layers.png" alt="Layers of the Grammar of Graphics" width=350px height=auto>
     </a>
     <figcaption>Figure from "ggplot2 workshop part 1" by Thomas <br>Lin Pedersen. Accessed from YouTube March <br> 15th, 2025.</figcaption>
     </div>
