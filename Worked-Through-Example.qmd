@@ -143,7 +143,7 @@ Description of the variables:
 <div>
     <div style="float: left; position: relative; top: 0px; padding: 30px;">
     <a href="https://www.youtube.com/watch?v=h29g21z0a68">
-      <img src="images/All Layers.png" alt="Layers of the Grammar of Graphics" width=350px height=auto>
+      <img src="images/All_Layers.png" alt="Layers of the Grammar of Graphics" width=350px height=auto>
     </a>
     <figcaption>Figure from "ggplot2 workshop part 1" by Thomas <br>Lin Pedersen. Accessed from YouTube March <br> 15th, 2025.</figcaption>
     </div>
@@ -462,7 +462,7 @@ Up until this point, we have covered layers that attribute variables to geometri
 
 It is the **Coordinates** layer that then plots these values on a graph. It's important to appreciate this subtlety because some scaled or statistically transformed values will look entirely different if the wrong coordinate system is applied. Such as, if we attempted to plot an angle on a Cartesian plane in Euclidean space instead of in polar coordinates.
 
-[![Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.](Images/Coordinates_Data Visualization Bookdown Figure 5.png)](https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord)
+[![Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.](Images/Coordinates_Diagram.png){width="750" height="188"}](https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord)
 
 **Coordinate** layer functions fall into two buckets:
 
