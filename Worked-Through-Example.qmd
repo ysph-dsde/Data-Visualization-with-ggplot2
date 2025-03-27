@@ -12,9 +12,7 @@
       - url: ysph.yale.edu/dsde
   date: 03/27/2025
   date-format: long
-  format: 
-    html:
-      css: style.css
+  format: html
   editor: visual
   from: markdown+emoji
   markdown: 
@@ -41,7 +39,11 @@ In this workshop you will need to access the R code we have prepared for the in-
     renv::restore()            # download packages and their version saved in the lockfile.
     ```
 
-    **NOTE:** If you are asked to update packages, say no. The `renv()` is intended to recreate the same environment under which the project was created, making it reproducible. You are ready to proceed when running `renv::restore()` gives the output `- The library is already synchronized with the lockfile.`. You can read more about `renv()` in their [vignette](https://rstudio.github.io/renv/articles/renv.html).
+**NOTE:** If you are asked to update packages, say no. The `renv()` is intended to recreate the same environment under which the project was created, making it reproducible. You are ready to proceed when running `renv::restore()` gives the output:
+```
+- The library is already synchronized with the lockfile.
+```
+You can read more about `renv()` in their [vignette](https://rstudio.github.io/renv/articles/renv.html).
 
 {{< downloadthis "Discussion and Challenge Questions Download_03.26.2025.zip" label="Codespace for Discussion and Challenge Questions" id=download_btn >}}
 
@@ -214,7 +216,7 @@ list(df$Region |> unique(),
 
 df |>
   # Subset the data to one infection trend outcome by selecting one possible
-  # instantiation from the array of distringuishing varaibles.
+  # instantiation from the array of distinguishing variables.
   filter(Region == "Connecticut", Season == "2021-22", Level == "N/A") |>
   ggplot() +
     geom_line(aes(x = MMWRweek, y = Kernel))
@@ -327,13 +329,13 @@ Steps:
 ```{r layers_scales}
 
 # Specify the infection seasons we'd like to see out of the range of options.
-include_seeasons <- c("2022-23", "2023-24", "2024-25")
+include_seasons <- c("2022-23", "2023-24", "2024-25")
 
 # Using Scales to highlight insights to infection trends across seasons.
 plot_A <- df |>
   # Since we are grouping outcomes by Season, we only need to subset the
   # dataset to the three seasons we wish to plot.
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level == "N/A") |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level == "N/A") |>
   # Add the aesthetic mapping that will color (and group) outcomes based
   # on the unique elements in the Season variable. Also set the y-axis range
   # and customize plot labels.
@@ -409,7 +411,7 @@ Similar to the **Scales** layer, each plot object we compose implicitly assigns 
 
 # The default faceting is automatically applied.
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level == "N/A") |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level == "N/A") |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     labs(title = "RSV Infection Trends Since 2022",
@@ -439,7 +441,7 @@ ages_ordered <- c("5-17 Years", "18-49 Years", "75+ Years")
 df |>
   # We only want to maintain three of the seven age groups recorded. We can
   # use the same variable we generate above to select these.
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     labs(title = "RSV Infection Trends Since 2022",
@@ -458,7 +460,16 @@ Up until this point, we have covered layers that attribute variables to geometri
 
 It is the **Coordinates** layer that then plots these values on a graph. It's important to appreciate this subtlety because some scaled or statistically transformed values will look entirely different if the wrong coordinate system is applied. Such as, if we attempted to plot an angle on a Cartesian plane in Euclidean space instead of in polar coordinates.
 
-[![Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.](Images/Coordinates_Data Visualization Bookdown Figure 5.5.png)](https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord)
+```{=html}
+<div>
+    <div style="float: center; position: relative; top: 0px; padding: 30px;">
+    <a href="https://dark-star-161610.appspot.com/secured/_book/grammar-and-vocabulary.html#coord">
+      <img src="Images/Coordinates_Data Visualization Bookdown Figure 5.5.png" alt="Coordinates Figure from Data Visualization Bookdown" width=730px height=auto>
+    </a>
+    <figcaption>Figure 5.5 from "Data Visualization: From Theory to Practice" by James Baglin. Accessed March 22nd, 2025.</figcaption>
+    </div>
+</div>
+```
 
 **Coordinate** layer functions fall into two buckets:
 
@@ -472,9 +483,9 @@ Previously, we mentioned that axis limits can be applied in **Scales**, but by d
 ```{r layers_coordinates}
 #| eval: FALSE
 
-# By default plots are generated on non-transformed Cartesian coordinates.
+# By default, plots are generated on non-transformed Cartesian coordinates.
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     labs(title = "RSV Infection Trends Since 2022",
@@ -515,7 +526,7 @@ Each time you make a plot, the default is `theme_gray()`. As before, you do not 
 
 # Using one of ggplot2's provided theme presets.
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     labs(title = "RSV Infection Trends Since 2022",
@@ -578,13 +589,13 @@ This point is added to our graph as a fresh layer that is printed on the plot ob
 
 # Subset the dataset to isolate the leading data point we wish to plot.
 leading_point = df |> 
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   filter(MMWRyear == max(MMWRyear)) |>
   filter(MMWRweek == max(MMWRweek))
 
 # Add a new Geometry layer, geom_point(), using a new dataset.
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +  
     # Show the leading point as a red dot using the leading_point subset.
@@ -605,7 +616,7 @@ Look at us, we are such `ggplot` experts now! High five! Oh wait a second, for s
 
 In this section we will cover two advanced uses of `ggplot2` commonly used in public health: projecting data into a map and making the values interactive. These are topics well worth their own workshop, and I will not have time to do them justice here.
 
-The goal of the next two sections will be to introduce you to these rich topics. At the end of this section, you will hopefully find these topics more approachable and are better equipt to use them in your own work.
+The goal of the next two sections will be to introduce you to these rich topics. At the end of this section, you will hopefully find these topics more approachable and are better equip to use them in your own work.
 
 ### Introduction to Map Projections with `ggoplot`
 
@@ -617,7 +628,7 @@ Before we apply this function, let's think first about what we are doing. Previo
 
 Unfortunately, getting a file that contains the region boundaries we are looking for is a rather, shall we say, winding task. This problem gets compounded if we need our resource to contain granular information about the region, such as rivers, lakes, and topology, or even man-made infrastructure, such as roads, cities, or census boundaries.
 
-We're not going to bother with this problem for now. Our dataset contains information about select continguous U.S. states, and batches those trends into the HHS regions. Even though we do not need to be immediately concerned with how to plot Alaska and Hawaii into the same figure, we will include that as well.
+We're not going to bother with this problem for now. Our dataset contains information about select contiguous U.S. states, and batches those trends into the HHS regions. Even though we do not need to be immediately concerned with how to plot Alaska and Hawaii into the same figure, we will include that as well.
 
 Here, we will reference the Topologically Integrated Geographic Encoding and Referencing, or [TIGER/Line Shapefiles](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html), provided by the U.S. Census Bureau. The R package `tigris` allows us to pull these files from the U.S. Census Bureau website and process them for our application.
 
@@ -666,7 +677,7 @@ Going back to our running example, let's show the distribution of infection tren
 ```{r}
 
 subset <- df |>
-  # Keep only the states and the time-frame we want to plot.
+  # Keep only the states and the timeframe we want to plot.
   filter(Region %in% c(datasets::state.name, "District of Columbia"),
          Season %in% "2024-25", MMWRweek %in% c(24:26))
 
@@ -705,7 +716,7 @@ A static graphic can communicate a lot about your data, but with html widgets, l
 
 Today, I will show you how to apply one of the most commonly used interactive packages, `plotly`. This package is cross platform compatible and can be used in Python, Julia, and MATLAB. It has its own standalone function for plot generation that come with more options, but if you are looking to quickly make a `ggplot()` interactive all you need to do is wrap it with `ggplotly()`.
 
-You can find more about `plotly` and the kinds of interactive plots it can generate with `ggplot()` objections in their documentaion: [Plotly R Open Source Graphing Library](https://plotly.com/r/) and [Plotly ggplot2 Open Source Graphing Library](https://plotly.com/ggplot2/).
+You can find more about `plotly` and the kinds of interactive plots it can generate with `ggplot()` objections in their documentation: [Plotly R Open Source Graphing Library](https://plotly.com/r/) and [Plotly ggplot2 Open Source Graphing Library](https://plotly.com/ggplot2/).
 
 ```{r}
 
@@ -742,3 +753,5 @@ You can find the code for these questions and their suggested solutions in `Disc
 ## Appendix
 
 This workshop was generated using R (v 4.4.4) in the RStudio IDE (v 2024.12.1+563). `renv` was used to store all the relevant packages and package versions with the workshop codespace. All of the workshop materials can be accessed on the ysph-dsde GitHub: [Data Visualization with ggplo2](https://github.com/ysph-dsde/Data-Visualization-with-ggplot2/). All relevant citations for this document can be found in the **Appendix** of the slides.
+
+This site was built on a ysph-dsde.github.io page. It was rendered using Quarto (v 1.6.3) and theme [sandstone](https://bootswatch.com/sandstone/).

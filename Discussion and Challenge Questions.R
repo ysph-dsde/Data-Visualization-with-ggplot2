@@ -60,6 +60,8 @@ us_geo <- tigris::states(class = "sf", cb = TRUE) |>
   shift_geometry()
 
 
+
+
 ## ----------------------------------------------------------------
 ## WORKSHOP DISCUSSIONS
 
@@ -96,14 +98,14 @@ df |>
 ## DISCUSSION #2 - THE SCALES LAYER
 
 # Specify the infection seasons we'd like to see out of the range of options.
-include_seeasons <- c("2022-23", "2023-24", "2024-25")
+include_seasons <- c("2022-23", "2023-24", "2024-25")
 
 ## We see that associating a variable with an aes(color) will also group 
 ## by that same variable.
 
 # Using Scales to highlight insights to infection trends across seasons.
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level == "N/A") |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level == "N/A") |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     scale_color_brewer(type = "qual", palette = "Dark2")
@@ -162,19 +164,19 @@ ggplot(diamonds, aes(carat, price)) +
 ## QUESTION #1 - THE FACETS LAYER
 
 # Copying the subsetting vectors for Season and Characteristic Level.
-include_seeasons <- c("2022-23", "2023-24", "2024-25")
+include_seasons <- c("2022-23", "2023-24", "2024-25")
 ages_ordered <- c("5-17 Years", "18-49 Years", "75+ Years")
 
 # Copying the data subsetting code to get the leading point.
 leading_point = df |> 
-  filter(Region == "Connecticut", Season %in% include_seeasons, 
+  filter(Region == "Connecticut", Season %in% include_seasons, 
          Level %in% ages_ordered) |>
   filter(MMWRyear == max(MMWRyear)) |>
   filter(MMWRweek == max(MMWRweek))
 
 
 ## In the worked through example we leverage two of the three distinguishing
-## variables: Season and Characteristic Level. In this questions, we want to
+## variables: Season and Characteristic Level. In these questions, we want to
 ## focus on the third one, Region.
 ## 
 ## Recall the available outcomes for Region.
@@ -186,7 +188,7 @@ df$Region |> unique()
 
 # Modify the following block of code.
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     geom_point(data = leading_point, aes(x = MMWRweek, y = Kernel), 
@@ -221,13 +223,13 @@ df |>
 
 # Modify the following two blocks code.
 leading_point = df |> 
-  filter(Region == "Connecticut", Season %in% include_seeasons, 
+  filter(Region == "Connecticut", Season %in% include_seasons, 
          Level %in% ages_ordered) |>
   filter(MMWRyear == max(MMWRyear)) |>
   filter(MMWRweek == max(MMWRweek))
 
 df |>
-  filter(Region == "Connecticut", Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region == "Connecticut", Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
   geom_line() +
   geom_point(data = leading_point, aes(x = MMWRweek, y = Kernel), 
@@ -259,7 +261,7 @@ geo_df <- us_geo |>
 
 
 ## In our line graph we faceted by age groups. But we see that if we apply
-## a simple Facet  layer to our map plot the NA values get plotted in their 
+## a simple Facet layer to our map plot the NA values get plotted in their 
 ## own panel.
 ## 
 ## a. Why is this happening?
@@ -289,14 +291,14 @@ include_regions <- c("Region 1", "Region 4")
 
 # Recalculate the subset for our leading point.
 leading_point = df |> 
-  filter(Region %in% include_regions, Season %in% include_seeasons, 
+  filter(Region %in% include_regions, Season %in% include_seasons, 
          Level %in% ages_ordered) |>
   filter(MMWRyear == max(MMWRyear)) |>
   filter(MMWRweek == max(MMWRweek))
 
 # Define our plot object.
 p <- df |>
-  filter(Region %in% include_regions, Season %in% include_seeasons, Level %in% ages_ordered) |>
+  filter(Region %in% include_regions, Season %in% include_seasons, Level %in% ages_ordered) |>
   ggplot(aes(x = MMWRweek, y = Kernel, color = Season) ) +
     geom_line() +
     geom_point(data = leading_point, aes(x = MMWRweek, y = Kernel), 
@@ -319,7 +321,7 @@ p + facet_grid(Region~factor(Level, levels = ages_ordered))
 ## QUESTION #2 - OVERLAYING LAYERS
 
 df %>%
-  filter(Region == "Connecticut", Season %in% include_seeasons, 
+  filter(Region == "Connecticut", Season %in% include_seasons, 
          Level %in% ages_ordered) %>%
   #-- Wrap the entire ggplot() object with the function assigning the left result
   #-- to the variable "y". Notice that we now need to change the pipe from
