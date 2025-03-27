@@ -9,6 +9,7 @@
 /.quarto/
 /docs/
 /_site/
+sites_libs/
 *.docx
 *.html
 *_files
